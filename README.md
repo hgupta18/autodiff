@@ -1,6 +1,8 @@
 # cs207-FinalProject
 [![Build Status](https://travis-ci.com/make-AD-ifference/cs207-FinalProject.png)](https://travis-ci.com/make-AD-ifference/cs207-FinalProject/)
 
+[![Coverage Status](https://codecov.io/gh/make-AD-ifference/cs207-FinalProject.svg)](https://codecov.io/gh/make-AD-ifference/cs207-FinalProject/)
+
 Jade Kessler
 
 Hardik Gupta
