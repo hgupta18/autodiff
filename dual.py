@@ -27,7 +27,7 @@ class Dual():
         return self.real == other.real and self.dual == other.dual
 
     def __repr__(self):
-        return "REAL: {}\nDual: {}".format(self.real, self.dual)
+        return "REAL: {}\nDUAL: {}".format(self.real, self.dual)
 
     def __str__(self):
         return "{} + e{}".format(self.real, self.dual)

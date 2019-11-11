@@ -14,7 +14,11 @@ def test_dual_mul():
     assert 2*my_num == dual.Dual(4,4)
     assert my_num*dual.Dual(2,3) == dual.Dual(4,10)
 
+def test_repr():
+    my_num = dual.Dual(2, 3)
+    assert repr(my_num) == "REAL: {}\nDUAL: {}".format(my_num.real, my_num.dual)
 
-if __name__ == '__main__':
-    #test_dual_add()
-    test_dual_mul()
+def test_str():
+    my_num = dual.Dual(2, 3)
+    assert str(my_num) == "{} + e{}".format(my_num.real, my_num.dual)
+
