@@ -2,6 +2,7 @@ import sys
 sys.path.append('../')
 
 import pytest
+print(sys.path)
 import makeADifference
 import makeADifference.dual as dual
 import numpy as np
