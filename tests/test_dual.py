@@ -1,5 +1,6 @@
 import sys
-sys.path.append('../')
+#sys.path.append('../')
+sys.path.append(sys.path[0][:-5])
 
 import pytest
 for p in sys.path:
