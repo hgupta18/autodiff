@@ -1,9 +1,10 @@
 import sys
-sys.path.append('../../')
+sys.path.append('../')
 
 import pytest
-print(sys.path)
-import makeADifference
+for p in sys.path:
+    print(p)
+#import makeADifference
 import makeADifference.dual as dual
 import numpy as np
 
