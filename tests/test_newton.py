@@ -42,6 +42,7 @@ def newton(num, func):
 
         # Catch zero derivatives
         if(np.abs(num.der) == 0):
+            print("MY NUM: {}".format(num))
             raise FloatingPointError("ZERO DERIVATIVE")
 
         root -= num.val/num.der
@@ -101,6 +102,10 @@ def test_pow():
     my_num = ad.AutoDiff(0.5)
     assert np.isclose(newton(my_num, lambda x: power(x, 2, 0, -1)), 1) # x^2 - 1, root=1
 
+    # Test guess is root
+    my_num = ad.AutoDiff(0)
+    assert np.isclose(newton(my_num, lambda x: power(x, 2)), 0)
+
     # Test zero derivative failure mode
     my_num = ad.AutoDiff(0)
     try:
@@ -114,10 +119,64 @@ def test_pow():
 
 
 def test_polynomial():
+    '''
+        This function tests polynomials built from the power method
+        The cases tested are:
+            General polynomial with 3 roots
+            polynomial with repeated root
+            polynomial with imaginary roots
+    '''
 
     def polynomial(x, a, b, c, d):
         return a*x**3 + b*x**2 + c*x + d
-    assert True
+
+
+    # General polynomial
+    func = lambda x: polynomial(x, 1, -2, -1, 2) # f(x) = (x+1)(x-1)(x-2)
+
+    # Finding roots from the right
+    my_num = ad.AutoDiff(-0.6)
+    assert np.isclose(newton(my_num, func), -1)
+    my_num = ad.AutoDiff(1.2)
+    assert np.isclose(newton(my_num, func), 1)
+    my_num = ad.AutoDiff(4)
+    assert np.isclose(newton(my_num, func), 2)
+
+    # Finding roots from the left
+    my_num = ad.AutoDiff(-2)
+    assert np.isclose(newton(my_num, func), -1)
+    my_num = ad.AutoDiff(0.2)
+    assert np.isclose(newton(my_num, func), 1)
+    my_num = ad.AutoDiff(1.6)
+    assert np.isclose(newton(my_num, func), 2)
+
+
+    # Polynomial with repeated root
+    func = lambda x: polynomial(x, 1, 0, -3, 2) # f(x) = (x-1)(x-1)(x+2)
+
+    # Finding the roots from the right
+    my_num = ad.AutoDiff(-1.1)
+    assert np.isclose(newton(my_num, func), -2)
+    my_num = ad.AutoDiff(2)
+    assert np.isclose(newton(my_num, func), 1)
+
+    # Finding the roots from the left
+    my_num = ad.AutoDiff(-3)
+    assert np.isclose(newton(my_num, func), -2)
+    my_num = ad.AutoDiff(0)
+    assert np.isclose(newton(my_num, func), 1)
+
+
+    # Polynomial with imaginary roots
+    func = lambda x: polynomial(x, 1, 0, 4, 0) # f(x) = x(x+2i)(x-2i)
+
+    # Finding the root from the right
+    my_num = ad.AutoDiff(1)
+    assert np.isclose(newton(my_num, func), 0)
+
+    # Finding the root from the left
+    my_num = ad.AutoDiff(-1)
+    assert np.isclose(newton(my_num, func), 0)
 
 
 def test_trig():
@@ -125,5 +184,6 @@ def test_trig():
 
 
 if __name__ == '__main__':
-    test_pow()
+    #test_pow()
+    test_polynomial()
 
