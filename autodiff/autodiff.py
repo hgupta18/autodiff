@@ -14,6 +14,9 @@ class AutoDiff():
             new_der = self.der
         return AutoDiff(new_val, new_der)
 
+    def __str__(self):
+        return "{} + e{}".format(self.val, self.der)
+
     def __radd__(self, other):
         return self.__add__(other)
 
@@ -65,8 +68,8 @@ class AutoDiff():
             new_val = self.val*other.val
             new_der = self.der*other.val + other.der*self.val
         except AttributeError:
-            new_val = self.val*other
-            new_der = self.der*other
+            new_val = self.val**other
+            new_der = (self.der*self.val)**(other-1)*other
         return AutoDiff(new_val, new_der)
 
     ## unary operators
