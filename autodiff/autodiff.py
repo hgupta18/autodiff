@@ -17,7 +17,10 @@ class AutoDiff():
             new_der = self.der
         return AutoDiff(new_val, new_der)
 
-    def __radd__(self, other): #add function if input order is reversed
+    def __str__(self):
+        return "{} + e{}".format(self.val, self.der)
+
+    def __radd__(self, other):
         return self.__add__(other)
 
     def __sub__(self, other): #subtraction function
