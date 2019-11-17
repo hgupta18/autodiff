@@ -116,6 +116,30 @@ class AutoDiff():
 
 if __name__ == "__main__":
 
+    # defining parameters
+    a = 2.0
+    x = AutoDiff(a)
+    # b = 4.0
+    # y = AutoDiff(b)
+    alpha = 10.0
+    beta = 5.0
+
+    # demo 1
+    f = 3*x/(2*x+4)
+    print(f.val, f.der)
+
+    # demo 2
+    f = beta / (alpha * x)
+    print(f.val, f.der)
+
+    # demo 3
+    f = beta - alpha * x
+    print(f.val, f.der)
+
+    # demo 4
+    f = beta + x * alpha
+    print(f.val, f.der)
+    
     #demo def __pow__(self, other):
     a = 1
     x = AutoDiff(a)
