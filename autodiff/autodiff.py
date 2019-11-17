@@ -1,4 +1,3 @@
-import mpmath as m
 import numpy as np 
 
 class AutoDiff():
@@ -83,18 +82,18 @@ class AutoDiff():
 
     ## elementary functions
     def sin(self): #sine function
-        new_val = m.sin(self.val)
-        new_der = self.der * m.cos(self.val)
+        new_val = np.sin(self.val)
+        new_der = self.der * np.cos(self.val)
         return AutoDiff(new_val, new_der)
 
     def cos(self): #cosine function
-        new_val = m.cos(self.val)
-        new_der = self.der * ( - m.sin(self.val))
+        new_val = np.cos(self.val)
+        new_der = self.der * ( - np.sin(self.val))
         return AutoDiff(new_val, new_der)
 
     def tan(self): #tangent function
-        new_val = m.tan(self.val)
-        new_der = self.der * m.sec(self.val)
+        new_val = np.tan(self.val)
+        new_der = self.der * np.sec(self.val)
         return AutoDiff(new_val, new_der)
 
     def ln(self): #natural log function
@@ -103,13 +102,13 @@ class AutoDiff():
         return AutoDiff(new_val, new_der)
 
     def log(self, base): # log function with base as input
-        new_val = m.log(self.val, base)
+        new_val = np.log(self.val, base)
         new_der = self.der * (1 / (self.val * np.log(base)))
         return AutoDiff(new_val, new_der)
     
     def exp(self): # exp function
-        new_val = m.exp(self.val)
-        new_der = self.der * m.exp(self.val)
+        new_val = np.exp(self.val)
+        new_der = self.der * np.exp(self.val)
         return AutoDiff(new_val, new_der)
 
     def sqrt(self): # sqrt function 
