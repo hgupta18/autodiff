@@ -40,6 +40,13 @@ class AutoDiff():
         
         """
         return "{} + e{}".format(self.val, self.der)
+        
+    def __repr__(self):
+        """ 
+        returns string value of the function
+        
+        """
+        return "{} + e{}".format(self.val, self.der)
 
     def __radd__(self, other):
         """
