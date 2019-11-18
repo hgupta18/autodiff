@@ -1,5 +1,8 @@
+import sys
+sys.path.append(sys.path[0][:-5])
+
 import pytest
-from autodiff import AutoDiff
+from autodiff.autodiff import AutoDiff
 
 def test_add_objects():
     error_message = "Problem with test_add_objects"
