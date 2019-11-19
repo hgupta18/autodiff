@@ -51,12 +51,18 @@ def test_multiple_constant():
     assert AD2.val == 10
     assert AD2.der == 30
 
-# def test_divide_objects():
-#     AD1 = AutoDiff(15,45)
-#     AD2 = AutoDiff(30,90)
-#     AD3 = AD1/AD2
-    # assert AD3.val == 0.5
-    # assert AD3.der == 
+def test_divide_objects():
+    AD1 = AutoDiff(15,45)
+    AD2 = AutoDiff(30,90)
+    AD3 = AD1/AD2
+    assert AD3.val == 0.5
+    assert AD3.der == (45*30-15*90)/(30**2)
+
+def test_divide_constant():
+    AD1 = AutoDiff(15,45)
+    AD3 = AD1/3
+    assert AD3.val == 5
+    assert AD3.der == (1/3)*(45)
 
 def test_power():
     AD1 = AutoDiff(2,3)
