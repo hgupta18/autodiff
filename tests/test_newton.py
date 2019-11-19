@@ -2,7 +2,7 @@ import sys
 sys.path.append(sys.path[0][:-5])
 
 import pytest
-import makeADifference.dual as dual
+import scratch.dual as dual
 import autodiff.autodiff as ad
 import numpy as np
 
