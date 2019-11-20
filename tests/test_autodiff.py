@@ -18,7 +18,11 @@ def test_add_constant():
     assert AD2.val == 5
     assert AD2.der == 2
 
-# def test_add_string():
+def test_radd():
+    AD1 = AutoDiff(1,2)
+    AD2 = 4 + AD1
+    assert AD2.val == 5
+    assert AD2.der == 2
 
 def test_subtract_objects():
     AD1 = AutoDiff(5,10)
@@ -31,12 +35,17 @@ def test_subtract_objects():
     assert AD4.val == -2
     assert AD4.der == -6
 
-
 def test_subtract_constant():
     AD1 = AutoDiff(5,10)
     AD2 = AD1 - 3
     assert AD2.val == 2
     assert AD2.der == 10
+
+def test_rsub():
+    AD1 = AutoDiff(5,10)
+    AD2 = 8 - AD1
+    assert AD2.val == 3
+    assert AD2.der == -10
 
 def test_multiply_objects():
     AD1 = AutoDiff(5,15)
@@ -48,6 +57,12 @@ def test_multiply_objects():
 def test_multiple_constant():
     AD1 = AutoDiff(5,15)
     AD2 = AD1*2
+    assert AD2.val == 10
+    assert AD2.der == 30
+
+def test_rmul():
+    AD1 = AutoDiff(5,15)
+    AD2 = 2*AD1
     assert AD2.val == 10
     assert AD2.der == 30
 
@@ -64,7 +79,20 @@ def test_divide_constant():
     assert AD3.val == 5
     assert AD3.der == (1/3)*(45)
 
-def test_power():
+def test_rtruediv():
+    AD1 = AutoDiff(3,5)
+    AD3 = 15/AD1
+    assert AD3.val == 5
+    assert AD3.der == (-15*5)/(3**2)  
+
+def test_power_objects():
+    AD1 = AutoDiff(2,3)
+    AD2 = AutoDiff(3,4)
+    AD3 = AD1**AD2
+    assert AD3.val == 8
+    assert AD3.der == 3*(2**(3-1))*3
+
+def test_power_constant():
     AD1 = AutoDiff(2,3)
     AD2 = AD1**5
     assert AD2.val == 32
@@ -117,3 +145,11 @@ def test_sqrt():
     AD2 = AutoDiff.sqrt(AD1)
     assert AD2.val == 2 ** (1/2)
     assert AD2.der == 3*(1/2)*(2**(-1/2))
+
+def test_str():
+    AD1 = AutoDiff(2,3)
+    assert AutoDiff.__str__(AD1) == "AutoDiff(2,3)"
+
+def test_repr():
+    AD1 = AutoDiff(2,3)
+    assert AutoDiff.__repr__(AD1) == "AutoDiff(2,3)"
