@@ -16,6 +16,8 @@ class AutoDiff():
         Initializes AutoDiff object w/ inputs val and der. Der set to 1 initially.
 
         """
+        assert isinstance(val, int) or isinstance(val, float), "Please provide value as int or float"
+        assert isinstance(der, int) or isinstance(der, float), "Please provide derivative as int or float"
         self.val = val
         self.der = der
 
