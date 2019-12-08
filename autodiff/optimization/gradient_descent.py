@@ -2,7 +2,7 @@ import sys
 sys.path.append(sys.path[0][:-21])
 
 import numpy as np
-from autodiff.new_autodiff import AutoDiff as ad
+from autodiff.autodiff import AutoDiff as ad
 
 
 def gradient_descent(f, x, steps=100000, step_size=0.1, tol=10e-8):
@@ -38,13 +38,12 @@ def gradient_descent(f, x, steps=100000, step_size=0.1, tol=10e-8):
             x[j] = ad(x[j].val, default_der[j])
 
         # Check if converged
-        print(np.linalg.norm(x - last))
         if(np.linalg.norm(x - last) < tol):
-            return [x, True]
+            return [x, True, i]
 
         last = np.copy(x)
 
-    return [x, False]
+    return [x, False, i]
 
 
 
