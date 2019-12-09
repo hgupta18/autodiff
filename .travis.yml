@@ -6,6 +6,6 @@ before_install:
     - pip install codecov
     - pip install -r requirements.txt
 script:
-    - pytest --cov=autodiff/.
+    - pytest --cov-config=.coveragerc --cov=autodiff/.
 after_success:
     - codecov
