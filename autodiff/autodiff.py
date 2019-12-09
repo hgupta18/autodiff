@@ -36,6 +36,7 @@ class AutoDiff():
         """
         return "AutoDiff({},{})".format(self.val, self.der)
 
+
     """ Comparison operators """
     def __gt__(self, other):
         '''
@@ -76,6 +77,7 @@ class AutoDiff():
             return self.val < other.val
         except AttributeError: # assumes other is scalar
             return self.val < other
+
 
     """binary operators""" 
     def __add__(self, other): 
@@ -407,12 +409,10 @@ class AutoDiff():
 # print(z.der)
 
 
+
 #x = AutoDiff(1, [1 , 0]) 
 #y = AutoDiff(2, [0 , 1])
 #f1 = 2 * x + 3 * y
 #f2 = AutoDiff.exp(x) + y ** 3
 #f3 = AutoDiff.cos(x)  + 3 * AutoDiff.sin(y)
 #print(f1, f2, f3)
-
-
-
