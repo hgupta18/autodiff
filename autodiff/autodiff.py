@@ -44,9 +44,9 @@ class AutoDiff():
         returns boolean, True if value of self is greater than or equal to other else False
         '''
         try: # assumes two autodiff objects
-            return self.val >= other.val
+            return self.val > other.val
         except AttributeError: # assumes other is scalar
-            return self.val >= other
+            return self.val > other
 
     def __ge__(self, other):
         '''
@@ -54,9 +54,9 @@ class AutoDiff():
         returns boolean, True if value of self is greater than other else False
         '''
         try: # assumes two autodiff objects
-            return self.val > other.val
+            return self.val >= other.val
         except AttributeError: # assumes other is scalar
-            return self.val > other
+            return self.val >= other
 
     def __lt__(self, other):
         '''
@@ -64,9 +64,9 @@ class AutoDiff():
         returns boolean, True if value of self is less than or equal to other else False
         '''
         try: # assumes two autodiff objects
-            return self.val <= other.val
+            return self.val < other.val
         except AttributeError: # assumes other is scalar
-            return self.val <= other
+            return self.val < other
 
     def __le__(self, other):
         '''
@@ -74,9 +74,9 @@ class AutoDiff():
         returns boolean, True if value of self is less than other else False
         '''
         try: # assumes two autodiff objects
-            return self.val < other.val
+            return self.val <= other.val
         except AttributeError: # assumes other is scalar
-            return self.val < other
+            return self.val <= other
 
 
     """binary operators""" 
@@ -333,86 +333,87 @@ class AutoDiff():
         new_der = self.der * ((1/2) * (self.val ** (- 1/2)))
         return AutoDiff(new_val, new_der)
 
-#Demo
-# AD1 = AutoDiff([2,3], [2,6])
-# AD2 = 2 + AD1
-# print(AD1)
-# print(AD2)
+if __name__ == "__main__":
+    #Demo
+    AD1 = AutoDiff([[2,3],[4,5]], [2,6])
+    AD2 = 2 ** AD1
+    print(AD1)
+    print(AD2)
 
 
-# AD1 = AutoDiff(1)
-# AD2 = AutoDiff(3)
-# AD3 = AD1 + AD2
-# AD4 = AD1 + 4
-# AD5 = AutoDiff([AD1, AD2])
+    # AD1 = AutoDiff(1)
+    # AD2 = AutoDiff(3)
+    # AD3 = AD1 + AD2
+    # AD4 = AD1 + 4
+    # AD5 = AutoDiff([AD1, AD2])
 
-# print(AD1)
-# print(AD2)
-# print(AD3)
-# print(AD4)
-# # print(AD5)
+    # print(AD1)
+    # print(AD2)
+    # print(AD3)
+    # print(AD4)
+    # # print(AD5)
 
-# x = AutoDiff([1], [1, 0, 0])
-# y = AutoDiff([2], [0, 1, 0])
-# z = AutoDiff([3], [0, 0, 1])
-# print('x: ',format(x))
-# print('y: ',format(y))
-# print('z: ',format(z))
+    # x = AutoDiff([1], [1, 0, 0])
+    # y = AutoDiff([2], [0, 1, 0])
+    # z = AutoDiff([3], [0, 0, 1])
+    # print('x: ',format(x))
+    # print('y: ',format(y))
+    # print('z: ',format(z))
 
-# f = x + y + z
-# print(f)
+    # f = x + y + z
+    # print(f)
 
-# g = 2 * x + x * y
-# print(x)
-# print(y)
-# print(g)
-# print(g.val)
-# print(g.der)
+    # g = 2 * x + x * y
+    # print(x)
+    # print(y)
+    # print(g)
+    # print(g.val)
+    # print(g.der)
 
-# z = AutoDiff(3, [1, 0]) + AutoDiff(4, [0, 1])
-# print(z)
+    # z = AutoDiff(3, [1, 0]) + AutoDiff(4, [0, 1])
+    # print(z)
 
-# z = AutoDiff(3, [1, 0]) - AutoDiff(4, [0, 1])
-# print(z)
+    # z = AutoDiff(3, [1, 0]) - AutoDiff(4, [0, 1])
+    # print(z)
 
-# x = AutoDiff(3.0, [1, 0])
-# y = AutoDiff(2, [0, 1])
-# z = x * y
-# print(z)
+    # x = AutoDiff(3.0, [1, 0])
+    # y = AutoDiff(2, [0, 1])
+    # z = x * y
+    # print(z)
 
-# x = AutoDiff(3.0, [1, 0, 0])
-# y = AutoDiff(1.0, [0, 1, 0])
-# w = AutoDiff(2.0, [0, 0, 1])
-# z = x + y ** 2 + x * w
-# print(z)
+    # x = AutoDiff(3.0, [1, 0, 0])
+    # y = AutoDiff(1.0, [0, 1, 0])
+    # w = AutoDiff(2.0, [0, 0, 1])
+    # z = x + y ** 2 + x * w
+    # print(z)
 
-# x = AutoDiff(3.0, [1, 0, 0])
-# y = AutoDiff(1.0, [0, 1, 0])
-# w = AutoDiff(2.0, [0, 0, 1])
-# z = (x + y ** 2 + x * w)/2
-# print(z)
-# print(z.val)
-# print(z.der)
+    # x = AutoDiff(3.0, [1, 0, 0])
+    # y = AutoDiff(1.0, [0, 1, 0])
+    # w = AutoDiff(2.0, [0, 0, 1])
+    # z = (x + y ** 2 + x * w)/2
+    # print(z)
+    # print(z.val)
+    # print(z.der)
 
-# x = AutoDiff(3.0)
-# a = AutoDiff([ 1., x, x, 4.])
-# z = 3 / a
-# print(z.val) #not working
+    # x = AutoDiff(3.0)
+    # a = AutoDiff([ 1., x, x, 4.])
+    # z = 3 / a
+    # print(z.val) #not working
 
-# x = AutoDiff(3.0, [1, 0, 0])
-# y = AutoDiff(1.0, [0, 1, 0])
-# z = AutoDiff(2.0, [0, 0, 1])
-# f = 2 * x + y - 1 + z ** 2
-# z = f.__pow__(2)
-# print(z)
-# print(z.val)
-# print(z.der)
+    # x = AutoDiff(3.0, [1, 0, 0])
+    # y = AutoDiff(1.0, [0, 1, 0])
+    # z = AutoDiff(2.0, [0, 0, 1])
+    # f = 2 * x + y - 1 + z ** 2
+    # z = f.__pow__(2)
+    # print(z)
+    # print(z.val)
+    # print(z.der)
 
 
 
-#x = AutoDiff(1, [1 , 0]) 
-#y = AutoDiff(2, [0 , 1])
-#f1 = 2 * x + 3 * y
-#f2 = AutoDiff.exp(x) + y ** 3
-#f3 = AutoDiff.cos(x)  + 3 * AutoDiff.sin(y)
-#print(f1, f2, f3)
+    #x = AutoDiff(1, [1 , 0]) 
+    #y = AutoDiff(2, [0 , 1])
+    #f1 = 2 * x + 3 * y
+    #f2 = AutoDiff.exp(x) + y ** 3
+    #f3 = AutoDiff.cos(x)  + 3 * AutoDiff.sin(y)
+    #print(f1, f2, f3)
