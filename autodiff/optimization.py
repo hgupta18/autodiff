@@ -1,7 +1,7 @@
 import sys
-sys.path.append(sys.path[0][:-21])
+#sys.path.append(sys.path[0][:-21])
 import numpy as np
-from autodiff.autodiff import AutoDiff as ad
+from autodiff import AutoDiff as ad
 
 def _hessian_update(B, y, s):
     '''
@@ -162,7 +162,7 @@ def conjugate_gradient(f, num, step_size=0.01, tol=10e-8, max_iter=10000, return
 
         # Break out of loop if we have reached maximum iterations
         if(iterations > max_iter):
-            return num, False, iterations
+            return num, False, iterations, np.array(trace)
 
     if(return_trace):
         return num, True, iterations, np.array(trace)
@@ -211,16 +211,18 @@ def gradient_descent(func, num, step_size=0.1, tol=10e-8, max_iter=10000, return
     # Set up values
     n_func = len(num)  # Number of functions in the vector
     default_der = np.copy([num[i].der for i in range(n_func)]) # Used for casting back to AD
-    #last = np.copy(func(num).val)  # Last value, used to check convergence
     last = np.ones(len(num))*999
 
     iterations = 0
     if(return_trace):
         trace = [num]
 
+    if(all(func(num).der == np.zeros(len(func(num).der)))): # Zero derivative
+        return num, False, 0
+
     while(np.linalg.norm(num-last) > tol):
 
-        last = np.copy(num)
+        last = np.copy([n.val for n in num])
 
         # Evaluate function to get derivatives
         f_val = func(num)
@@ -238,7 +240,10 @@ def gradient_descent(func, num, step_size=0.1, tol=10e-8, max_iter=10000, return
 
         iterations += 1
         if(iterations == max_iter):
-            break
+            if(return_trace):
+                return num, False, iterations, np.array(trace)
+            else:
+                return num, False, iterations
 
     if(return_trace):
         return num, True, iterations, np.array(trace)

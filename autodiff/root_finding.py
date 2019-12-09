@@ -1,7 +1,5 @@
 import sys
-sys.path.append(sys.path[0][:-21])
-
-from autodiff.autodiff import AutoDiff as ad
+from autodiff import AutoDiff as ad
 import numpy as np
 
 
@@ -10,7 +8,7 @@ def _inv_jacobian(num):
     return np.linalg.pinv(jac)
 
 
-def newton(func, num, tol=1e-10, max_iter=10000):
+def newton(func, num, tol=1e-10, max_iter=10000, return_trace=False):
     '''
         This function runs Newton's method of root finding.
 
@@ -26,6 +24,9 @@ def newton(func, num, tol=1e-10, max_iter=10000):
 
           max_iter: int, optional (default = 1e-10)
                     Maximum number of iterations before no convergence is declared
+
+          return_trace: boolean, optional (default = False)
+                        Returns trace of minimization procedure if True
 
         OUTPUT:
             root: AutoDiff object
@@ -54,6 +55,8 @@ def newton(func, num, tol=1e-10, max_iter=10000):
     last = np.array([-999]*len(num))
     root = [n.val for n in num]
     default_der = np.copy([num[i].der for i in range(len(num))])
+    if(return_trace):
+        trace = [num]
 
     # Started at root case
     if(isinstance(func(num), ad)):
@@ -82,11 +85,19 @@ def newton(func, num, tol=1e-10, max_iter=10000):
 
         f_val = np.copy([f.val for f in func(num)])
 
+        if(return_trace):
+            trace.append(num)
         iterations += 1
         if(iterations == max_iter):
-            return num, False, iterations
+            if(return_trace):
+                return num, False, iterations, trace
+            else:
+                return num, False, iterations
 
-    return num, True, iterations
+    if(return_trace):
+        return num, False, iterations, trace
+    else:
+        return num, False, iterations
 
 
 if __name__ == '__main__':
