@@ -122,6 +122,42 @@ def test_tan():
     assert AD2.val == np.tan(2)
     assert AD2.der == 3/(np.cos(2)**2)
 
+def test_arcsine():
+    AD1 = AutoDiff(0.5,3)
+    AD2 = AutoDiff.arcsine(AD1)
+    assert AD2.val == np.arcsin(0.5)
+    assert AD2.der == 3/((1 - 0.5**2)**(1/2))
+
+def test_arccosine():
+    AD1 = AutoDiff(0.5,3)
+    AD2 = AutoDiff.arccosine(AD1)
+    assert AD2.val == np.arccos(0.5)
+    assert AD2.der == -3/((1 - 0.5**2)**(1/2))
+
+def test_arctangent():
+    AD1 = AutoDiff(0.5,3)
+    AD2 = AutoDiff.arccosine(AD1)
+    assert AD2.val == np.arctan(0.5)
+    assert AD2.der == 3/(0.5**2 + 1)
+
+def test_sinh():
+    AD1 = AutoDiff(2,3)
+    AD2 = AutoDiff.sinh(AD1)
+    assert AD2.val == np.sinh(2)
+    assert AD2.der == 3*np.cosh(2)
+
+def test_cosh():
+    AD1 = AutoDiff(2,3)
+    AD2 = AutoDiff.cosh(AD1)
+    assert AD2.val == np.cosh(2)
+    assert AD2.der == 3*np.sinh(2)
+
+def test_tanh():
+    AD1 = AutoDiff(2,3)
+    AD2 = AutoDiff.cosh(AD1)
+    assert AD2.val == np.tanh(2)
+    assert AD2.der == 3*1/(np.cosh(2)**2)
+
 def test_ln():
     AD1 = AutoDiff(2,3)
     AD2 = AutoDiff.ln(AD1)
