@@ -36,6 +36,49 @@ class AutoDiff():
         """
         return "AutoDiff({},{})".format(self.val, self.der)
 
+
+    """ Comparison operators """
+    def __gt__(self, other):
+        '''
+        inputs: self: AD object, other: AD object or scalar
+        returns boolean, True if value of self is greater than or equal to other else False
+        '''
+        try: # assumes two autodiff objects
+            return self.val >= other.val
+        except AttributeError: # assumes other is scalar
+            return self.val >= other
+
+    def __ge__(self, other):
+        '''
+        inputs: self: AD object, other: AD object or scalar
+        returns boolean, True if value of self is greater than other else False
+        '''
+        try: # assumes two autodiff objects
+            return self.val > other.val
+        except AttributeError: # assumes other is scalar
+            return self.val > other
+
+    def __lt__(self, other):
+        '''
+        inputs: self: AD object, other: AD object or scalar
+        returns boolean, True if value of self is less than or equal to other else False
+        '''
+        try: # assumes two autodiff objects
+            return self.val <= other.val
+        except AttributeError: # assumes other is scalar
+            return self.val <= other
+
+    def __le__(self, other):
+        '''
+        inputs: self: AD object, other: AD object or scalar
+        returns boolean, True if value of self is less than other else False
+        '''
+        try: # assumes two autodiff objects
+            return self.val < other.val
+        except AttributeError: # assumes other is scalar
+            return self.val < other
+
+
     """binary operators""" 
     def __add__(self, other): 
         """
@@ -366,9 +409,10 @@ class AutoDiff():
 # print(z.der)
 
 
-x = AutoDiff(1, [1 , 0]) 
-y = AutoDiff(2, [0 , 1])
-f1 = 2 * x + 3 * y
-f2 = AutoDiff.exp(x) + y ** 3
-f3 = AutoDiff.cos(x)  + 3 * AutoDiff.sin(y)
-print(f1, f2, f3)
+
+#x = AutoDiff(1, [1 , 0]) 
+#y = AutoDiff(2, [0 , 1])
+#f1 = 2 * x + 3 * y
+#f2 = AutoDiff.exp(x) + y ** 3
+#f3 = AutoDiff.cos(x)  + 3 * AutoDiff.sin(y)
+#print(f1, f2, f3)
