@@ -65,7 +65,8 @@ def BFGS(func, num, init_hessian=None, step_size=0.1, tol=1e-10, max_iter=10000,
 
     while(np.linalg.norm(last - num) > tol):
         last = np.copy([v.val for v in num])
-# Calculate gradient for BFGS method
+
+        # Calculate gradient for BFGS method
         df_val = -func(num).der
         s = np.linalg.solve(init_hessian, df_val)
         num += s
@@ -210,7 +211,8 @@ def gradient_descent(func, num, step_size=0.1, tol=10e-8, max_iter=10000, return
     # Set up values
     n_func = len(num)  # Number of functions in the vector
     default_der = np.copy([num[i].der for i in range(n_func)]) # Used for casting back to AD
-    last = np.copy(func(num).val)  # Last value, used to check convergence
+    #last = np.copy(func(num).val)  # Last value, used to check convergence
+    last = np.ones(len(num))*999
 
     iterations = 0
     if(return_trace):
@@ -218,8 +220,9 @@ def gradient_descent(func, num, step_size=0.1, tol=10e-8, max_iter=10000, return
 
     while(np.linalg.norm(num-last) > tol):
 
+        last = np.copy(num)
+
         # Evaluate function to get derivatives
-        print(num)
         f_val = func(num)
 
         # Update values by stepping along derivative
@@ -230,7 +233,6 @@ def gradient_descent(func, num, step_size=0.1, tol=10e-8, max_iter=10000, return
         for j in range(n_func):
             num[j] = ad(num[j].val, default_der[j])
 
-        last = np.copy(num)
         if(return_trace):
             trace.append(np.copy(num))
 
