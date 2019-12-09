@@ -290,7 +290,7 @@ class AutoDiff():
 
         """
         new_val = np.tanh(self.val)
-        new_der = self.der * ( 1 - np.tanh(self.val) ** 2)
+        new_der = self.der * 1 / (np.cosh(self.val) ** 2)
         return AutoDiff(new_val, new_der)
 
     def ln(self):
