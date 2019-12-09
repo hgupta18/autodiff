@@ -214,7 +214,7 @@ class AutoDiff():
     def __rpow__(self, other):
         """
         inputs: self: AD object, other: AD object or scalar 
-        returns AD object of true division of two inputs in the form other ** self
+        returns AD object of power function of the form other ** self
 
         """
         try: # assumes self & other are autodiff objects

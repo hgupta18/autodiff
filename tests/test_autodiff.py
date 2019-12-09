@@ -101,6 +101,20 @@ def test_power_constant():
     assert AD2.val == 32
     assert AD2.der == 240
 
+def test_rpow_objects():
+    AD1 = AutoDiff(2,3)
+    AD2 = AutoDiff(3,4)
+    AD3 = AD1.__rpow__(AD2)
+    assert AD3.val == 3**2
+    assert AD3.der == 2 * (3**(2-1)) * 4
+
+def test_rpow_constant():
+    AD1 = AutoDiff(2,3)
+    AD2 = 5**AD1
+    assert AD2.val == 5**2
+    assert AD2.der == 3 * (5**2) * np.log(5)
+
+
 def test_negation():
     AD1 = AutoDiff(2,3)
     AD2 = -AD1
