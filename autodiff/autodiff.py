@@ -38,6 +38,28 @@ class AutoDiff():
 
 
     """ Comparison operators """
+    def __eq__(self, other):
+        '''
+        inputs: self: AD object, other: AD object or scalar
+        returns boolean, True if value of self is equal to other else False
+        '''
+        try: # assumes two autodiff objects
+            return self.val == other.val
+        except AttributeError: # assumes other is scalar
+            return self.val == other
+
+
+    def __ne__(self, other):
+        '''
+        inputs: self: AD object, other: AD object or scalar
+        returns boolean, True if value of self is not equal to other else False
+        '''
+        try: # assumes two autodiff objects
+            return self.val != other.val
+        except AttributeError: # assumes other is scalar
+            return self.val != other
+
+
     def __gt__(self, other):
         '''
         inputs: self: AD object, other: AD object or scalar
@@ -323,6 +345,27 @@ class AutoDiff():
         new_der = self.der * np.exp(self.val)
         return AutoDiff(new_val, new_der)
 
+    def expm(self, base):
+        """
+        inputs: self: AD object
+        returns AD object of exponential function of the form exp(self)
+
+        """
+        new_val = base ** self.val
+        new_der = self.der * ( base ** self.val ) * np.log(base)
+        return AutoDiff(new_val, new_der)
+
+    def logistic(self):
+        """
+        inputs: self: AD object
+        returns AD object of logistic function of the form logistic(self)
+
+        """
+        new_val = 1 / ( 1 + np.exp(- self.val))
+        new_der = np.exp(self.val) / ((1 + np.exp(self.val)) ** 2)
+        return AutoDiff(new_val, new_der)
+
+
     def sqrt(self):
         """
         inputs: self: AD object
@@ -333,12 +376,12 @@ class AutoDiff():
         new_der = self.der * ((1/2) * (self.val ** (- 1/2)))
         return AutoDiff(new_val, new_der)
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     #Demo
-    AD1 = AutoDiff([[2,3],[4,5]], [2,6])
-    AD2 = 2 ** AD1
-    print(AD1)
-    print(AD2)
+    # AD1 = AutoDiff([[2,3],[4,5]], [2,6])
+    # AD2 = 2 ** AD1
+    # print(AD1)
+    # print(AD2)
 
 
     # AD1 = AutoDiff(1)
@@ -417,3 +460,8 @@ if __name__ == "__main__":
     #f2 = AutoDiff.exp(x) + y ** 3
     #f3 = AutoDiff.cos(x)  + 3 * AutoDiff.sin(y)
     #print(f1, f2, f3)
+
+    # x = AutoDiff(1) 
+    # y = AutoDiff(2, [0 , 1])
+    # f1 = AutoDiff.tanh(x)
+    # print(f1)
