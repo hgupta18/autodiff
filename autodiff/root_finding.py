@@ -1,5 +1,6 @@
 import sys
-from autodiff import AutoDiff as ad
+#from autodiff import AutoDiff as ad
+from autodiff.autodiff import AutoDiff as ad
 import numpy as np
 
 

@@ -1,7 +1,7 @@
 import sys
 #sys.path.append(sys.path[0][:-21])
 import numpy as np
-from autodiff import AutoDiff as ad
+from autodiff.autodiff import AutoDiff as ad
 
 def _hessian_update(B, y, s):
     '''
