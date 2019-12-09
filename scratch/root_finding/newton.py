@@ -1,11 +1,12 @@
 import sys
 sys.path.append(sys.path[0][:-21])
 
+import pytest
 from autodiff.autodiff import AutoDiff as ad
 import numpy as np
 
 
-def _inv_jacobian(num):
+def inv_jacobian(num):
     jac = np.array([list(n.der) for n in num])
     return np.linalg.pinv(jac)
 
@@ -52,7 +53,7 @@ def newton(func, num, tol=1e-10):
         if(np.linalg.norm([n.der for n in num]) == 0):
             raise FloatingPointError("ZERO DERIVATIVE")
 
-        root -= np.dot(_inv_jacobian(num), num)
+        root -= np.dot(inv_jacobian(num), num)
         num = np.copy([ad(v.val, default_der[j]) for j, v in enumerate(root)])
 
         n_val = np.copy([n.val for n in num])

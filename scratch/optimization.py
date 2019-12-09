@@ -1,7 +1,8 @@
 import sys
 sys.path.append(sys.path[0][:-21])
+
 import numpy as np
-from autodiff.autodiff import AutoDiff as ad
+from autodiff import autodiff as ad
 
 def _hessian_update(B, y, s):
     '''
@@ -11,7 +12,7 @@ def _hessian_update(B, y, s):
            np.dot(B, np.outer(s, np.dot(s.T, B)))/np.dot(s.T, np.dot(B, s))
 
 
-def BFGS(func, num, init_hessian=None, step_size=0.1, tol=1e-10, max_iter=10000, 
+def BFGS(func, num, init_hessian=None, step_size=0.1, tol=1e-10, max_iter=10000,
          return_trace=False):
     '''
         INPUTS:
@@ -35,7 +36,8 @@ def BFGS(func, num, init_hessian=None, step_size=0.1, tol=1e-10, max_iter=10000,
                     number of iterations allowed before no convergence is declared
 
           return_trace: boolean, optional (default = False)
-                        Returns the trace of points if True. Useful for plotting
+                        Returns all points along the minimization path. USeful for plotting
+
 
         OUTPUTS:
           min: np.ndarray of AutoDiff objects
@@ -43,7 +45,6 @@ def BFGS(func, num, init_hessian=None, step_size=0.1, tol=1e-10, max_iter=10000,
 
           converged: boolean
                      True if the algorithm comverge, else False
-
           iterations: int
                       The number of iterations performed, whether or not the algorithm converged
 
@@ -54,41 +55,29 @@ def BFGS(func, num, init_hessian=None, step_size=0.1, tol=1e-10, max_iter=10000,
     '''
 
     # If hessian guess is default value, set to identity
+    print("WHY")
     if(init_hessian == None):
         init_hessian = np.eye(len(num))
 
     # Initialize variables for loop
     last = np.ones(len(num))*999
     iterations = 0
-    if(return_trace):
-        trace = [num]
 
     while(np.linalg.norm(last - num) > tol):
         last = np.copy([v.val for v in num])
-# Calculate gradient for BFGS method
         df_val = -func(num).der
         s = np.linalg.solve(init_hessian, df_val)
         num += s
         y = func(num).der + df_val
-        
-        # Update Hessian
         init_hessian += _hessian_update(init_hessian, y, s)
-
-        # Append to trace
-        if(return_trace):
-            trace.append(np.copy(num))
-
         iterations += 1
         if(iterations == max_iter):
             return num, False, iterations
     
-    if(return_trace):
-        return num, True, iterations, np.array(trace)
-    else:
-        return num, True, iterations
+    return num, True, iterations
 
 
-def conjugate_gradient(f, num, step_size=0.01, tol=10e-8, max_iter=10000, return_trace=False):
+def conjugate_gradient(f, num, step_size=0.01, tol=10e-8, max_iter=10000):
     '''
         INPUTS:
           func: callable (function)
@@ -109,9 +98,6 @@ def conjugate_gradient(f, num, step_size=0.01, tol=10e-8, max_iter=10000, return
 
           max_iter: int, optional (default = 10000)
                     number of iterations allowed before no convergence is declared
-
-          return_trace: boolean, optional (default = False)
-                        Returns the trace of points if True. Useful for plotting
 
 
         OUTPUTS:
@@ -137,8 +123,6 @@ def conjugate_gradient(f, num, step_size=0.01, tol=10e-8, max_iter=10000, return
     # Initialize the variables for the loop
     last = np.ones(len(num))*999
     iterations = 0
-    if(return_trace):
-        trace = [num]
 
     while(np.linalg.norm(last - num) > tol):
         last = np.copy(num)
@@ -156,20 +140,14 @@ def conjugate_gradient(f, num, step_size=0.01, tol=10e-8, max_iter=10000, return
 
         iterations += 1
 
-        if(return_trace):
-            trace.append(np.copy(num))
-
         # Break out of loop if we have reached maximum iterations
         if(iterations > max_iter):
             return num, False, iterations
 
-    if(return_trace):
-        return num, True, iterations, np.array(trace)
-    else:
-        return num, True, iterations
+    return num, True, iterations
 
 
-def gradient_descent(func, num, step_size=0.1, tol=10e-8, max_iter=10000, return_trace=False):
+def gradient_descent(func, num, step_size=0.1, tol=10e-8, max_iter=10000):
     '''
         INPUTS:
           func: callable (function)
@@ -186,9 +164,6 @@ def gradient_descent(func, num, step_size=0.1, tol=10e-8, max_iter=10000, return
 
           max_iter: int, optional (default = 10000)
                     number of iterations allowed before no convergence is declared
-
-          return_trace: boolean, optional (default = False)
-                        Returns the trace of points if True. Useful for plotting
 
 
         OUTPUTS:
@@ -212,14 +187,9 @@ def gradient_descent(func, num, step_size=0.1, tol=10e-8, max_iter=10000, return
     default_der = np.copy([num[i].der for i in range(n_func)]) # Used for casting back to AD
     last = np.copy(func(num).val)  # Last value, used to check convergence
 
-    iterations = 0
-    if(return_trace):
-        trace = [num]
-
-    while(np.linalg.norm(num-last) > tol):
+    for i in range(max_iter):
 
         # Evaluate function to get derivatives
-        print(num)
         f_val = func(num)
 
         # Update values by stepping along derivative
@@ -230,18 +200,13 @@ def gradient_descent(func, num, step_size=0.1, tol=10e-8, max_iter=10000, return
         for j in range(n_func):
             num[j] = ad(num[j].val, default_der[j])
 
+        # Check if converged
+        if(np.linalg.norm(num - last) < tol):
+            return [num, True, i]
+
         last = np.copy(num)
-        if(return_trace):
-            trace.append(np.copy(num))
 
-        iterations += 1
-        if(iterations == max_iter):
-            break
-
-    if(return_trace):
-        return num, True, iterations, np.array(trace)
-    else:
-        return num, True, iterations
+    return [x, False, i]
 
 
 if __name__ == '__main__':
@@ -263,8 +228,6 @@ if __name__ == '__main__':
     y = ad(1, [0.,1.,0.])
     z = ad(1, [0.,0.,1.])
 
-    #fn = lambda x: (x[0]+1)**2 + x[1]**2 + (x[2]-2)**2
-    fn = lambda x: x[0].sin() + x[1]**2 + (x[2]-2)**2
-    #print(fn([x, y, z]))
+    fn = lambda x: (x[0].cos()+1)**2 + x[1]**2 + (x[2]-2)**2
     print(gradient_descent(fn, [x, y, z], step_size=0.8))
 

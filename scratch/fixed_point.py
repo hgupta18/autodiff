@@ -1,18 +1,14 @@
 import sys
 sys.path.append(sys.path[0][:-21])
 
+import pytest
 from autodiff.autodiff import AutoDiff as ad
 import numpy as np
 
 
-def _inv_jacobian(num):
-    jac = np.array([list(n.der) for n in num])
-    return np.linalg.pinv(jac)
-
-
-def newton(func, num, tol=1e-10):
+def fixed_point(func, num, tol=1e-10, max_iter=10000):
     '''
-        This function runs Newton's method of root finding.
+        This function runs fixed point iteration for root finding.
 
         INPUTS:
           num: an autodiff number object
@@ -31,7 +27,7 @@ def newton(func, num, tol=1e-10):
             message "ZERO DERIVATIVE"
             When a the starting point is the root, this function returns the root immediately.
     '''
-    last = np.array([-999]*len(num))
+    #last = np.array([-999]*len(num))
     root = [n.val for n in num]
     default_der = np.copy([num[i].der for i in range(len(num))])
 
@@ -41,34 +37,29 @@ def newton(func, num, tol=1e-10):
     if(np.linalg.norm(f_val) < tol):
         return num
 
+    # Comparison used to determine convergence
+    last = np.ones(len(num))*999
+
     # Root finding algorithm. Terminates after 200 steps with error message
     iterations = 0
-    while(np.linalg.norm(f_val) > 1e-10):
+    while(np.linalg.norm(last - num) > 1e-30):
 
-        last = np.copy([n.val for n in num])
+        last = np.copy(num)
         num = func(num)
-
-        # Catch zero derivatives
-        if(np.linalg.norm([n.der for n in num]) == 0):
-            raise FloatingPointError("ZERO DERIVATIVE")
-
-        root -= np.dot(_inv_jacobian(num), num)
-        num = np.copy([ad(v.val, default_der[j]) for j, v in enumerate(root)])
-
-        n_val = np.copy([n.val for n in num])
-        f_val = np.copy([f.val for f in func(num)])
+        print(num)
+        num = np.copy([ad(n.val, default_der[j]) for j, n in enumerate(num)])
 
         iterations += 1
-        if(iterations == 2000):
+        if(iterations == max_iter):
             return num, False, iterations
 
     return num, True, iterations
 
 
 if __name__ == '__main__':
-    x = ad(1, [1., 0., 0.])
-    y = ad(1, [0., 1., 0.])
-    z = ad(1, [0., 0., 1.])
-    fn = lambda x: [(x[1]-1)**3, x[2]**3, x[0]**3]
-    print(newton(fn, [x,y,z]))
+    x = ad(0.3, [1., 0., 0.])
+    y = ad(0.9, [0., 1., 0.])
+    #z = ad(0.9, [0., 0., 1.])
+    fn = lambda x: [(x[0]-0.2)**2]#, (x[1])**2]#, (x[2]+0.1)**2]
+    print(fixed_point(fn, [x]))
 

@@ -2,7 +2,6 @@ import sys
 sys.path.append(sys.path[0][:-5])
 
 import numpy as np
-import autodiff.autodiff as ad
 import autodiff.optimization as opt
 
 def test_conjugate_gradient():
