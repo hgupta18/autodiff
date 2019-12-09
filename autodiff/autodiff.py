@@ -11,15 +11,30 @@ class AutoDiff():
 
     """
 
-    def __init__(self, val, der = 1): 
+    def __init__(self, values, der = [1]): 
         """ 
         Initializes AutoDiff object w/ inputs val and der. Der set to 1 initially.
 
         """
-        assert isinstance(val, int) or isinstance(val, float), "Please provide value as int or float"
-        assert isinstance(der, int) or isinstance(der, float), "Please provide derivative as int or float"
-        self.val = val
-        self.der = der
+        # assert isinstance(val, int) or isinstance(val, float), "Please provide value as int or float"
+        # assert isinstance(der, int) or isinstance(der, float), "Please provide derivative as int or float"
+        self.val = np.array(values) # set to np array
+        self.der = np.array(der) # set to np array
+        
+
+    def __str__(self):
+        """ 
+        returns string value of the function
+        
+        """
+        return "AutoDiff({},{})".format(self.val, self.der)
+
+    def __repr__(self):
+        """ 
+        returns string value of the function
+        
+        """
+        return "AutoDiff({},{})".format(self.val, self.der)
 
     """binary operators""" 
     def __add__(self, other): 
@@ -35,20 +50,6 @@ class AutoDiff():
             new_val = self.val + other
             new_der = self.der
         return AutoDiff(new_val, new_der)
-
-    def __str__(self):
-        """ 
-        returns string value of the function
-        
-        """
-        return "AutoDiff({},{})".format(self.val, self.der)
-
-    def __repr__(self):
-        """ 
-        returns string value of the function
-        
-        """
-        return "AutoDiff({},{})".format(self.val, self.der)
 
     def __radd__(self, other):
         """
@@ -187,6 +188,68 @@ class AutoDiff():
         new_der = self.der / ( np.cos(self.val) ** 2 )
         return AutoDiff(new_val, new_der)
 
+    """ inverse trig functions """
+    def arcsine(self):
+        """
+        inputs: self: AD object
+        returns AD object of arcsine function of the form arcsine(self)
+
+        """
+        new_val = np.arcsin(self.val)
+        new_der = self.der / ((1 - self.val ** 2) ** (1/2))
+        return AutoDiff(new_val, new_der)
+
+    def arccosine(self):
+        """
+        inputs: self: AD object
+        returns AD object of arccosine function of the form arccosine(self)
+
+        """
+        new_val = np.arccos(self.val)
+        new_der = - self.der / ((1 - self.val ** 2) ** (1/2))
+        return AutoDiff(new_val, new_der)
+
+    def arctangent(self):
+        """
+        inputs: self: AD object
+        returns AD object of arctangent function of the form arctangent(self)
+
+        """
+        new_val = np.arctan(self.val)
+        new_der = self.der / (1 + self.val ** 2)
+        return AutoDiff(new_val, new_der)
+
+    """ hyperbolic functions """
+    def sinh(self):
+        """
+        inputs: self: AD object
+        returns AD object of sinh function of the form sinh(self)
+
+        """
+        new_val = np.sinh(self.val)
+        new_der = self.der * np.cosh(self.val)
+        return AutoDiff(new_val, new_der)
+
+    def cosh(self):
+        """
+        inputs: self: AD object
+        returns AD object of cosh function of the form cosh(self)
+
+        """
+        new_val = np.cosh(self.val)
+        new_der = self.der * np.sinh(self.val)
+        return AutoDiff(new_val, new_der)
+
+    def tanh(self):
+        """
+        inputs: self: AD object
+        returns AD object of tanh function of the form tanh(self)
+
+        """
+        new_val = np.tanh(self.val)
+        new_der = self.der * ( 1 - np.tanh(self.val) ** 2)
+        return AutoDiff(new_val, new_der)
+
     def ln(self):
         """
         inputs: self: AD object
@@ -226,3 +289,86 @@ class AutoDiff():
         new_val = self.val ** (1/2)
         new_der = self.der * ((1/2) * (self.val ** (- 1/2)))
         return AutoDiff(new_val, new_der)
+
+#Demo
+# AD1 = AutoDiff([2,3], [2,6])
+# AD2 = 2 + AD1
+# print(AD1)
+# print(AD2)
+
+
+# AD1 = AutoDiff(1)
+# AD2 = AutoDiff(3)
+# AD3 = AD1 + AD2
+# AD4 = AD1 + 4
+# AD5 = AutoDiff([AD1, AD2])
+
+# print(AD1)
+# print(AD2)
+# print(AD3)
+# print(AD4)
+# # print(AD5)
+
+# x = AutoDiff([1], [1, 0, 0])
+# y = AutoDiff([2], [0, 1, 0])
+# z = AutoDiff([3], [0, 0, 1])
+# print('x: ',format(x))
+# print('y: ',format(y))
+# print('z: ',format(z))
+
+# f = x + y + z
+# print(f)
+
+# g = 2 * x + x * y
+# print(x)
+# print(y)
+# print(g)
+# print(g.val)
+# print(g.der)
+
+# z = AutoDiff(3, [1, 0]) + AutoDiff(4, [0, 1])
+# print(z)
+
+# z = AutoDiff(3, [1, 0]) - AutoDiff(4, [0, 1])
+# print(z)
+
+# x = AutoDiff(3.0, [1, 0])
+# y = AutoDiff(2, [0, 1])
+# z = x * y
+# print(z)
+
+# x = AutoDiff(3.0, [1, 0, 0])
+# y = AutoDiff(1.0, [0, 1, 0])
+# w = AutoDiff(2.0, [0, 0, 1])
+# z = x + y ** 2 + x * w
+# print(z)
+
+# x = AutoDiff(3.0, [1, 0, 0])
+# y = AutoDiff(1.0, [0, 1, 0])
+# w = AutoDiff(2.0, [0, 0, 1])
+# z = (x + y ** 2 + x * w)/2
+# print(z)
+# print(z.val)
+# print(z.der)
+
+# x = AutoDiff(3.0)
+# a = AutoDiff([ 1., x, x, 4.])
+# z = 3 / a
+# print(z.val) #not working
+
+# x = AutoDiff(3.0, [1, 0, 0])
+# y = AutoDiff(1.0, [0, 1, 0])
+# z = AutoDiff(2.0, [0, 0, 1])
+# f = 2 * x + y - 1 + z ** 2
+# z = f.__pow__(2)
+# print(z)
+# print(z.val)
+# print(z.der)
+
+
+x = AutoDiff(1, [1 , 0]) 
+y = AutoDiff(2, [0 , 1])
+f1 = 2 * x + 3 * y
+f2 = AutoDiff.exp(x) + y ** 3
+f3 = AutoDiff.cos(x)  + 3 * AutoDiff.sin(y)
+print(f1, f2, f3)
