@@ -136,7 +136,7 @@ def test_arccosine():
 
 def test_arctangent():
     AD1 = AutoDiff(0.5,3)
-    AD2 = AutoDiff.arccosine(AD1)
+    AD2 = AutoDiff.arctangent(AD1)
     assert AD2.val == np.arctan(0.5)
     assert AD2.der == 3/(0.5**2 + 1)
 
@@ -154,7 +154,7 @@ def test_cosh():
 
 def test_tanh():
     AD1 = AutoDiff(2,3)
-    AD2 = AutoDiff.cosh(AD1)
+    AD2 = AutoDiff.tanh(AD1)
     assert AD2.val == np.tanh(2)
     assert AD2.der == 3*1/(np.cosh(2)**2)
 
