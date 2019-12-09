@@ -211,6 +211,20 @@ class AutoDiff():
             new_der = other * (self.val ** (other - 1)) * self.der
         return AutoDiff(new_val, new_der)
 
+    def __rpow__(self, other):
+        """
+        inputs: self: AD object, other: AD object or scalar 
+        returns AD object of true division of two inputs in the form other ** self
+
+        """
+        try: # assumes self & other are autodiff objects
+            new_val = other.val ** self.val
+            new_der = self.val * (other.val ** (self.val - 1)) * other.der
+        except AttributeError: # assumes self is autodiff object and other is scalar
+            new_val = other ** self.val
+            new_der = self.der * ( other ** self.val ) * np.log(other)
+        return AutoDiff(new_val, new_der)
+
     """ unary operators """
     def __neg__(self): 
         """
