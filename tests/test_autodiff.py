@@ -72,6 +72,9 @@ def test_divide_objects():
     AD3 = AD1/AD2
     assert AD3.val == 0.5
     assert AD3.der == (45*30-15*90)/(30**2)
+    AD4 = AD2.__rtruediv__(AD1)
+    assert AD4.val == 0.5
+    assert AD4.der == (45*30-15*90)/(30**2) 
 
 def test_divide_constant():
     AD1 = AutoDiff(15,45)
@@ -176,6 +179,18 @@ def test_exp():
     assert AD2.val == np.exp(2)
     assert AD2.der == 3*np.exp(2)
 
+def test_expm():
+    AD1 = AutoDiff(2,3)
+    AD2 = AutoDiff.expm(AD1, 10)
+    assert AD2.val == 10 ** 2
+    assert AD2.der == 3 * (10 ** 2) * np.log(10)
+
+def test_logistic():
+    AD1 = AutoDiff(2,3)
+    AD2 = AutoDiff.logistic(AD1)
+    assert AD2.val == 1 / (1 + np.exp(-2))
+    assert AD2.der == 3*np.exp(-2)/(1+np.exp(-2))**2
+
 def test_sqrt():
     AD1 = AutoDiff(2,3)
     AD2 = AutoDiff.sqrt(AD1)
@@ -189,3 +204,53 @@ def test_str():
 def test_repr():
     AD1 = AutoDiff(2,3)
     assert AutoDiff.__repr__(AD1) == "AutoDiff(2,3)"
+
+def test_eq():
+    AD1 = AutoDiff(2,3)
+    AD2 = AutoDiff(3,3)
+    AD3 = AutoDiff(2,-4)
+    assert AD1.__eq__(AD2) == False
+    assert AD1.__eq__(AD3) == True
+    assert AD1.__eq__(2) == True
+    assert AD1.__eq__(3) == False
+
+def test_ne():
+    AD1 = AutoDiff(2,3)
+    AD2 = AutoDiff(3,3)
+    AD3 = AutoDiff(2,-4)
+    assert AD1.__ne__(AD2) == True
+    assert AD1.__ne__(AD3) == False
+    assert AD1.__ne__(2) == False
+    assert AD1.__ne__(3) == True
+
+def test_gt():
+    AD1 = AutoDiff(2,3)
+    AD2 = AutoDiff(3,3)
+    assert AD1.__gt__(2) == False
+    assert AD1.__gt__(0) == True
+    assert AD1.__gt__(AD2) == False
+    assert AD2.__gt__(AD1) == True
+
+def test_ge():
+    AD1 = AutoDiff(2,3)
+    AD2 = AutoDiff(3,3)
+    assert AD1.__ge__(2) == True
+    assert AD1.__ge__(4) == False
+    assert AD1.__ge__(AD2) == False
+    assert AD2.__ge__(AD1) == True
+
+def test_lt():
+    AD1 = AutoDiff(2,3)
+    AD2 = AutoDiff(3,3)
+    assert AD1.__lt__(2) == False
+    assert AD1.__lt__(4) == True
+    assert AD1.__lt__(AD2) == True
+    assert AD2.__lt__(AD1) == False
+
+def test_le():
+    AD1 = AutoDiff(2,3)
+    AD2 = AutoDiff(3,3)
+    assert AD1.__le__(2) == True
+    assert AD1.__le__(4) == True
+    assert AD1.__le__(AD2) == True
+    assert AD2.__le__(AD1) == False

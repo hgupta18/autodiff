@@ -362,7 +362,7 @@ class AutoDiff():
 
         """
         new_val = 1 / ( 1 + np.exp(- self.val))
-        new_der = np.exp(self.val) / ((1 + np.exp(self.val)) ** 2)
+        new_der = self.der * np.exp(self.val) / ((1 + np.exp(self.val)) ** 2)
         return AutoDiff(new_val, new_der)
 
 
