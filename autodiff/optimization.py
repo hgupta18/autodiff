@@ -1,8 +1,7 @@
 import sys
 sys.path.append(sys.path[0][:-21])
-
 import numpy as np
-from autodiff import AutoDiff as ad
+from autodiff.autodiff import AutoDiff as ad
 
 def _hessian_update(B, y, s):
     '''
@@ -66,8 +65,7 @@ def BFGS(func, num, init_hessian=None, step_size=0.1, tol=1e-10, max_iter=10000,
 
     while(np.linalg.norm(last - num) > tol):
         last = np.copy([v.val for v in num])
-
-        # Calculate gradient for BFGS method
+# Calculate gradient for BFGS method
         df_val = -func(num).der
         s = np.linalg.solve(init_hessian, df_val)
         num += s
@@ -221,6 +219,7 @@ def gradient_descent(func, num, step_size=0.1, tol=10e-8, max_iter=10000, return
     while(np.linalg.norm(num-last) > tol):
 
         # Evaluate function to get derivatives
+        print(num)
         f_val = func(num)
 
         # Update values by stepping along derivative
@@ -266,5 +265,6 @@ if __name__ == '__main__':
 
     #fn = lambda x: (x[0]+1)**2 + x[1]**2 + (x[2]-2)**2
     fn = lambda x: x[0].sin() + x[1]**2 + (x[2]-2)**2
+    #print(fn([x, y, z]))
     print(gradient_descent(fn, [x, y, z], step_size=0.8))
 
