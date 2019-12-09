@@ -3,7 +3,7 @@ import setuptools
 setuptools.setup(
   name = 'autodiff-kgl',
   packages=setuptools.find_packages(), # packages = ['autodiff'],
-  version = '0.3',
+  version = '0.3.3',
   license = 'MIT',
   description = 'Implementation of automatic differentiation using forward mode',
   author = 'Jade Kessler, Hardik Gupta, and Cooper Lorsung',
@@ -16,4 +16,5 @@ setuptools.setup(
     "Operating System :: OS Independent",
   ],
   python_requires='>=3.6',
+  install_requires=['numpy'],
 )
