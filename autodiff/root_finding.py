@@ -10,7 +10,7 @@ def _inv_jacobian(num):
     return np.linalg.pinv(jac)
 
 
-def newton(func, num, tol=1e-10):
+def newton(func, num, tol=1e-10, max_iter=10000):
     '''
         This function runs Newton's method of root finding.
 
@@ -23,6 +23,9 @@ def newton(func, num, tol=1e-10):
 
           tol: float, optional (default = 1e-10)
                Convergence tolerance
+
+          max_iter: int, optional (default = 1e-10)
+                    Maximum number of iterations before no convergence is declared
 
         OUTPUT:
             root: AutoDiff object
@@ -80,7 +83,7 @@ def newton(func, num, tol=1e-10):
         f_val = np.copy([f.val for f in func(num)])
 
         iterations += 1
-        if(iterations == 2000):
+        if(iterations == max_iter):
             return num, False, iterations
 
     return num, True, iterations
