@@ -215,7 +215,7 @@ def gradient_descent(func, num, step_size=0.1, tol=10e-8, max_iter=10000, return
 
     iterations = 0
     if(return_trace):
-        trace = [num]
+        trace = [np.copy(num)]
 
     if(all(func(num).der == np.zeros(len(func(num).der)))): # Zero derivative
         return num, False, 0
