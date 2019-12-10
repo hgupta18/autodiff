@@ -30,5 +30,21 @@ def test_newton():
     assert np.isclose(output[0][0].val, np.pi/2)
 
 
+    x = ad(1, [1.])
+    func = lambda x: x[0]
+
+    try:
+        _ = rf.newton(func, [x])
+    except TypeError:
+        assert True
+
+    x = ad(0.8, [1.])
+    fn = lambda x: [x[0].cos()]
+    output = rf.newton(fn, [x], tol=1e-10, return_trace=True)
+    assert np.isclose(output[0][0].val, np.pi/2)
+    assert output[3][0] == x
+    assert output[3][-1] == output[0]
+
+
 if __name__ == '__main__':
     test_newton()
