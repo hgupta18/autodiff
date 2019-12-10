@@ -81,20 +81,20 @@ def plot_2dtrajectory(func, points, converged=False, spacing=0.05, levels=20):
     plt.close(fig=fig)
 
 
-if __name__ == '__main__':
-    x = ad(-1, [1., 0.])
-    y = ad(1, [0., 1.])
-
-    fn = lambda x: 100*(x[1] - x[0]**2)**2 + (1 - x[0])**2
-    #fn = lambda x: (x[0]-1.4)**2 + x[1]**2
-    #fn = lambda x: [x[0]**3 + x[1]**3]
-
-    output = opt.conjugate_gradient(fn, [x,y], return_trace=True, step_size=0.00004,
-                                    max_iter=500)
-  
-    #print(rf.newton(fn, [x, y], return_trace=True))
-    #output = rf.newton(fn, [x, y], return_trace=True)
-    print(output[-1])
-    print(output[-1].shape)
-    plot_2dtrajectory(fn, output[-1], output[1], spacing=0.001, levels=100)
-
+#if __name__ == '__main__':
+#    x = ad(-1, [1., 0.])
+#    y = ad(1, [0., 1.])
+#
+#    fn = lambda x: 100*(x[1] - x[0]**2)**2 + (1 - x[0])**2
+#    #fn = lambda x: (x[0]-1.4)**2 + x[1]**2
+#    #fn = lambda x: [x[0]**3 + x[1]**3]
+#
+#    output = opt.conjugate_gradient(fn, [x,y], return_trace=True, step_size=0.00004,
+#                                    max_iter=500)
+#  
+#    #print(rf.newton(fn, [x, y], return_trace=True))
+#    #output = rf.newton(fn, [x, y], return_trace=True)
+#    print(output[-1])
+#    print(output[-1].shape)
+#    plot_2dtrajectory(fn, output[-1], output[1], spacing=0.001, levels=100)
+#
