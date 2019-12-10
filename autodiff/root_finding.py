@@ -57,7 +57,7 @@ def newton(func, num, tol=1e-10, max_iter=10000, return_trace=False):
     root = [n.val for n in num]
     default_der = np.copy([num[i].der for i in range(len(num))])
     if(return_trace):
-        trace = [num]
+        trace = [np.copy([n for n in num])]
 
     # Started at root case
     if(isinstance(func(num), ad)):
@@ -68,7 +68,8 @@ def newton(func, num, tol=1e-10, max_iter=10000, return_trace=False):
     f_val = np.copy([f.val for f in func(num)])
 
     if(np.linalg.norm(f_val) < tol):
-        return num
+        print("WHAT")
+        return num, False, 0, np.array(trace)
 
     # Root finding algorithm. Terminates after 200 steps with error message
     iterations = 0
@@ -87,24 +88,24 @@ def newton(func, num, tol=1e-10, max_iter=10000, return_trace=False):
         f_val = np.copy([f.val for f in func(num)])
 
         if(return_trace):
-            trace.append(num)
+            trace.append(np.copy([n for n in num]))
         iterations += 1
         if(iterations == max_iter):
             if(return_trace):
-                return num, False, iterations, trace
+                return num, False, iterations, np.array(trace)
             else:
                 return num, False, iterations
 
     if(return_trace):
-        return num, False, iterations, trace
+        return num, True, iterations, np.array(trace)
     else:
-        return num, False, iterations
+        return num, True, iterations
 
+#if __name__ == '__main__':
+#    x = ad(1, [1., 0., 0.])
+#    y = ad(1, [0., 1., 0.])
+#    z = ad(1, [0., 0., 1.])
+#    fn = lambda x: [(x[1]-1)**3, x[2]**3, x[0]**3]
+#    print(newton(fn, [x,y,z]))
 
-if __name__ == '__main__':
-    x = ad(1, [1., 0., 0.])
-    y = ad(1, [0., 1., 0.])
-    z = ad(1, [0., 0., 1.])
-    fn = lambda x: [(x[1]-1)**3, x[2]**3, x[0]**3]
-    print(newton(fn, [x,y,z]))
 

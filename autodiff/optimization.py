@@ -1,7 +1,7 @@
 import sys
-#sys.path.append(sys.path[0][:-21])
 import numpy as np
 from autodiff.autodiff import AutoDiff as ad
+#from autodiff import AutoDiff as ad
 
 def _hessian_update(B, y, s):
     '''
@@ -215,7 +215,7 @@ def gradient_descent(func, num, step_size=0.1, tol=10e-8, max_iter=10000, return
 
     iterations = 0
     if(return_trace):
-        trace = [num]
+        trace = [np.copy(num)]
 
     if(all(func(num).der == np.zeros(len(func(num).der)))): # Zero derivative
         return num, False, 0
@@ -251,27 +251,27 @@ def gradient_descent(func, num, step_size=0.1, tol=10e-8, max_iter=10000, return
         return num, True, iterations
 
 
-if __name__ == '__main__':
-    x = ad(1, [1., 0.])
-    y = ad(1, [0., 1.])
-    fn = lambda x: (x[0]-2)**2 + (x[1]+1)**2
-    _ = BFGS(fn, [x, y])
-    print(_)
-
-    x = ad(1, [1., 0.])
-    y = ad(1, [0., 1.])
-
-    fn = lambda x: (x[0]-3)**2 + (x[1] + 1)**2
-    print(conjugate_gradient(fn, [x,y]))
-
-    xs = [1]
-    ys = [1]
-    x = ad(1, [1.,0.,0.])
-    y = ad(1, [0.,1.,0.])
-    z = ad(1, [0.,0.,1.])
-
-    #fn = lambda x: (x[0]+1)**2 + x[1]**2 + (x[2]-2)**2
-    fn = lambda x: x[0].sin() + x[1]**2 + (x[2]-2)**2
-    #print(fn([x, y, z]))
-    print(gradient_descent(fn, [x, y, z], step_size=0.8))
-
+#if __name__ == '__main__':
+#    x = ad(1, [1., 0.])
+#    y = ad(1, [0., 1.])
+#    fn = lambda x: (x[0]-2)**2 + (x[1]+1)**2
+#    _ = BFGS(fn, [x, y])
+#    print(_)
+#
+#    x = ad(1, [1., 0.])
+#    y = ad(1, [0., 1.])
+#
+#    fn = lambda x: (x[0]-3)**2 + (x[1] + 1)**2
+#    print(conjugate_gradient(fn, [x,y]))
+#
+#    xs = [1]
+#    ys = [1]
+#    x = ad(1, [1.,0.,0.])
+#    y = ad(1, [0.,1.,0.])
+#    z = ad(1, [0.,0.,1.])
+#
+#    #fn = lambda x: (x[0]+1)**2 + x[1]**2 + (x[2]-2)**2
+#    fn = lambda x: x[0].sin() + x[1]**2 + (x[2]-2)**2
+#    #print(fn([x, y, z]))
+#    print(gradient_descent(fn, [x, y, z], step_size=0.8))
+#
