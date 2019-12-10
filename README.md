@@ -33,3 +33,9 @@
 # Importing package in Python
 
 - `from autodiff.autodiff import AutoDiff`
+
+- `import autodiff.optimization`
+
+- `import autodiff.root_finding`
+
+- `import autodiff.plot`

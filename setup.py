@@ -6,7 +6,7 @@ with open("README.md", "r") as f:
 setuptools.setup(
   name = 'autodiff-kgl',
   packages=setuptools.find_packages(), # packages = ['autodiff'],
-  version = '0.3.4',
+  version = '0.3.5',
   license = 'MIT',
   description = 'Implementation of automatic differentiation using forward mode',
   long_description = long_description,
