@@ -10,13 +10,26 @@
 
 # Installing package from GitHub
 
+- `conda create -n test python=3.6`
+
+- `conda activate test`
+
 - `git clone https://github.com/make-AD-ifference/cs207-FinalProject.git`
 
 - `cd cs207-FinalProject/`
 
 - `pip install -r requirements.txt`
 
+- `pytest`
 
 # Installing package from PyPI
 
+- `conda create -n test python=3.6`
+
+- `conda activate test`
+
 - `pip install autodiff-kgl`
+
+# Importing package in Python
+
+- `from autodiff.autodiff import AutoDiff`
