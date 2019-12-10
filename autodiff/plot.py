@@ -1,10 +1,11 @@
 import sys
 import numpy as np
-from autodiff import AutoDiff as ad 
+#from autodiff import AutoDiff as ad 
+from autodiff.autodiff import AutoDiff as ad
 from matplotlib import pyplot as plt
 
-import optimization as opt
-import root_finding as rf
+#import optimization as opt
+#import root_finding as rf
 
 def _ad_to_scalar(points):
     '''
@@ -49,6 +50,7 @@ def plot_2dtrajectory(func, points, converged=False, spacing=0.05, levels=20):
         NOTES:
             pass
     '''
+    # Expands plot borders around min and max elements in trace
     x_min = min(points[:,0])
     x_max = max(points[:,0])
     x_dist = x_max - x_min
@@ -61,11 +63,11 @@ def plot_2dtrajectory(func, points, converged=False, spacing=0.05, levels=20):
     y_min -= y_dist/10
     y_max += y_dist/10
 
+    # Created grid used for contour plots
     X, Y = np.mgrid[x_min.val: x_max.val :spacing, y_min.val :y_max.val :spacing]
     pos = np.dstack((X, Y))
 
-    ad_pos = []
-
+    # Converts output to points easier to plot
     scalar_points = _ad_to_scalar(points)
     func_grid_points = _func_grid_points(func, X, Y)
 
@@ -76,7 +78,7 @@ def plot_2dtrajectory(func, points, converged=False, spacing=0.05, levels=20):
         ax.scatter(scalar_points[:,0][-1], scalar_points[:,1][-1], marker='*', color='k',
                    s=70, label="Converged Point")
     plt.savefig("./trace.png")
-    plt.show()
+    plt.close(fig=fig)
 
 
 if __name__ == '__main__':
