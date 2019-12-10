@@ -16,8 +16,15 @@ class AutoDiff():
         Initializes AutoDiff object w/ inputs val and der. Der set to 1 initially.
 
         """
-        # assert isinstance(val, int) or isinstance(val, float), "Please provide value as int or float"
-        # assert isinstance(der, int) or isinstance(der, float), "Please provide derivative as int or float"
+        if isinstance(values, str):
+            raise TypeError("Cannot accept string values")
+        elif isinstance(values, list) and any(type(item)==str for item in values):
+            raise TypeError("Cannot accept string values")
+        elif isinstance(der, str):
+            raise TypeError("Cannot accept string values")
+        elif isinstance(der, list) and any(type(item)==str for item in der):
+            raise TypeError("Cannot accept string values")
+
         self.val = np.array(values) # set to np array
         self.der = np.array(der) # set to np array
         

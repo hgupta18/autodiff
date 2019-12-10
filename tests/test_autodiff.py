@@ -268,3 +268,31 @@ def test_le():
     assert AD1.__le__(4) == True
     assert AD1.__le__(AD2) == True
     assert AD2.__le__(AD1) == False
+
+def test_string_values():
+    with pytest.raises(TypeError):
+        AutoDiff("a", 2)
+    with pytest.raises(TypeError):
+        AutoDiff(2, "a")
+    with pytest.raises(TypeError):
+        AutoDiff([2,"a"],3)
+    with pytest.raises(TypeError):
+        AutoDiff(2,["a",3])
+
+def test_vector_values1():
+    AD1 = AutoDiff(2,[3,5])
+    AD2 = 2*AD1
+    assert AD2.val == 4
+    assert all(AD2.der == [6,10])
+
+def test_vector_values2():
+    AD1 = AutoDiff(2,[3,5])
+    AD2 = AD1 + 2
+    assert AD2.val == 4
+    assert all(AD2.der == [3,5])
+
+def test_vector_values3():
+    AD1 = AutoDiff(2,[3,5])
+    AD2 = AutoDiff.cos(AD1)
+    assert AD2.val == np.cos(2)
+    assert all(AD2.der == [-3*np.sin(2),-5*np.sin(2)])
