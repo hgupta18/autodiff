@@ -101,10 +101,10 @@ def newton(func, num, tol=1e-10, max_iter=10000, return_trace=False):
         return num, False, iterations
 
 
-if __name__ == '__main__':
-    x = ad(1, [1., 0., 0.])
-    y = ad(1, [0., 1., 0.])
-    z = ad(1, [0., 0., 1.])
-    fn = lambda x: [(x[1]-1)**3, x[2]**3, x[0]**3]
-    print(newton(fn, [x,y,z]))
+#if __name__ == '__main__':
+#    x = ad(1, [1., 0., 0.])
+#    y = ad(1, [0., 1., 0.])
+#    z = ad(1, [0., 0., 1.])
+#    fn = lambda x: [(x[1]-1)**3, x[2]**3, x[0]**3]
+#    print(newton(fn, [x,y,z]))
 
