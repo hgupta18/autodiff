@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 from autodiff.autodiff import AutoDiff as ad
+#from autodiff import AutoDiff as ad
 
 def _hessian_update(B, y, s):
     '''
